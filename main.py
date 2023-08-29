@@ -16,13 +16,14 @@ if "messages" not in st.session_state.keys(): # Initialize the chat message hist
 folder = './data'
 
 sub_folders = [name for name in os.listdir(folder) if os.path.isdir(os.path.join(folder, name))]
+pre_input = st.text_area("Write a prerequisite about your documents e.g You are an expert in python programming.")
 topic = st.selectbox("Select a topic in the data directory you want to index",sub_folders)
 @st.cache_resource(show_spinner=False)
 def load_data():
     with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
         reader = SimpleDirectoryReader(input_dir=f"""./data/{topic}""", recursive=True)
         docs = reader.load_data()
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt=f"You are an expert in the field of {topic}"))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt=pre_input))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
