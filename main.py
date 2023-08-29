@@ -20,7 +20,7 @@ pre_input = st.text_area("Write a prerequisite about your documents e.g You are 
 topic = st.selectbox("Select a topic in the data directory you want to index",sub_folders)
 @st.cache_resource(show_spinner=False)
 def load_data():
-    with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
+    with st.spinner(text="Loading and indexing the docs – hang tight! This should take 1-2 minutes."):
         reader = SimpleDirectoryReader(input_dir=f"""./data/{topic}""", recursive=True)
         docs = reader.load_data()
         service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt=pre_input))
